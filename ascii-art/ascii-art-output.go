@@ -1,4 +1,4 @@
-package asciiArt
+package asciiart
 
 import (
 	"bufio"
@@ -7,13 +7,9 @@ import (
 	"log"
 	"os"
 	"strings"
-	//"flag"
 )
 
-var (
-	numberfornewline int = 0
-	banner           string
-)
+var numberfornewline int = 0
 
 func checkErr(e error) {
 	if e != nil {
@@ -55,23 +51,44 @@ func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
 		for ch := 0; ch < len(inpBSlice); ch++ {
 			chLine += string((*chMap)[inpBSlice[ch]][l])
 		}
-		fmt.Print(chLine)
-		fmt.Println("")
-	}
-	if numberfornewline > 0 {
-		fmt.Print("\n")
+		// fmt.Print(chLine)
+		// fmt.Println("")
+
+		// if numberfornewline > 0 {
+		// 	fmt.Print("\n")
+		// }
+		res1 := strings.Split(os.Args[3], "=")
+
+		arraychline := []string{chLine}
+		file, err := os.OpenFile(res1[1], os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatalf("failed creating file: %s", err)
+		}
+
+		datawriter := bufio.NewWriter(file)
+
+		for _, data := range arraychline {
+			_, _ = datawriter.WriteString(data + "\n")
+		}
+
+		datawriter.Flush()
+		file.Close()
 	}
 }
 
-func AsciiConverer(text string, ban string) {
-	banner = ban
-
-	// Flags
-	// outputString := flag.String("output", "", "a string")
+func AsciiArt() {
+	// if len(os.Args) != 3 {
+	// 	fmt.Println("Arg amount is not right")
+	// }
+	// var outPut string
+	// flag.StringVar(&outPut, "string", "", "output string")
 	// flag.Parse()
+	// fmt.Println(*outPut)
 	// read input str
 	var inputStrSlices []string
-	inputStr := text
+	inputStr := os.Args[1]
+	banner := os.Args[2]
+
 	// fmt.Println("input: ", inputStr)
 	inputrune := []rune(inputStr)
 	s1 := inputStr

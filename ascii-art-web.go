@@ -62,11 +62,10 @@ func main() {
 
 	// fileServer1 := http.FileServer(http.Dir("./static"))
 	// http.Handle("/", fileServer1)
-	// http.HandleFunc("/test", helloHandler) // the web path
 	http.HandleFunc("/", pathHandler)
 
 	fmt.Printf("Starting server at port 8080\n")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8080", http.HandlerFunc(pathHandler)); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -35,9 +35,9 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 	ascii := r.FormValue("ascii")
 	banner := r.FormValue("banner")
 
-	fmt.Fprintf(w, "Ascii = %s\n", ascii)
-	fmt.Fprintf(w, "Banner = %s\n", banner)
-	// AsciiArt()
+	fmt.Fprintf(w, "Ascii = %s", ascii)
+	fmt.Fprintf(w, "Banner = %s", banner)
+	AsciiArt(w, ascii, banner)
 
 }
 

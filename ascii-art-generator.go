@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -45,41 +46,42 @@ func scanChar(r io.Reader, startLine int) ([]string, error) {
 	return bigCharLines, io.EOF
 }
 
-func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
+func printBigChar(w http.ResponseWriter, chMap *map[byte][]string, inpBSlice []byte) {
 	for l := 0; l < 8; l++ {
 		chLine := ""
 		for ch := 0; ch < len(inpBSlice); ch++ {
 			chLine += string((*chMap)[inpBSlice[ch]][l])
 		}
-		// fmt.Print(chLine)
-		// fmt.Println("")
+		fmt.Fprint(w, chLine)
+		fmt.Fprint(w, "")
 
-		// if numberfornewline > 0 {
-		// 	fmt.Print("\n")
+		if numberfornewline > 0 {
+			fmt.Print("\n") // not recognised in html, at least not outside of <pre>
+		}
+		// res1 := strings.Split(os.Args[3], "=") // need to be modified
+
+		// arraychline := []string{chLine}
+
+		// use later
+		// 	file, err := os.OpenFile(res1[1], os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		// 	if err != nil {
+		// 		log.Fatalf("failed creating file: %s", err)
+		// 	}
+
+		// 	datawriter := bufio.NewWriter(file)
+
+		// 	for _, data := range arraychline {
+		// 		_, _ = datawriter.WriteString(data + "\n")
+		// 	}
+
+		// 	datawriter.Flush()
+		// 	file.Close()
 		// }
-		res1 := strings.Split(os.Args[3], "=")
-
-		arraychline := []string{chLine}
-		file, err := os.OpenFile(res1[1], os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatalf("failed creating file: %s", err)
-		}
-
-		datawriter := bufio.NewWriter(file)
-
-		for _, data := range arraychline {
-			_, _ = datawriter.WriteString(data + "\n")
-		}
-
-		datawriter.Flush()
-		file.Close()
 	}
 }
 
-func AsciiArt() {
+func AsciiArt(w http.ResponseWriter, inputStr string, banner string) {
 	var inputStrSlices []string
-	inputStr := os.Args[1]
-	banner := os.Args[2]
 
 	// fmt.Println("input: ", inputStr)
 	inputrune := []rune(inputStr)
@@ -125,7 +127,6 @@ func AsciiArt() {
 
 			charMap[inputBSlice[inp]] = bigChar
 		}
-		// }
-		printBigChar(&charMap, inputBSlice)
+		printBigChar(w, &charMap, inputBSlice)
 	}
 }

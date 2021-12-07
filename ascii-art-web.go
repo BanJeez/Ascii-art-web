@@ -8,26 +8,37 @@ import (
 	"text/template"
 )
 
-func formHandler(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
-		fmt.Fprintf(w, "ParseForm() err: %v", err)
-		return
-	}
-	fmt.Fprintf(w, "POST request successful")
-	name := r.FormValue("name")
-	banner := r.FormValue("banner")
+// func formHandler(w http.ResponseWriter, r *http.Request) {
+// 	if err := r.ParseForm(); err != nil {
+// 		fmt.Fprintf(w, "ParseForm() err: %v", err)
+// 		return
+// 	}
+// 	fmt.Fprintf(w, "POST request successful")
+// 	name := r.FormValue("name")
+// 	banner := r.FormValue("banner")
 
-	fmt.Fprintf(w, "Name = %s\n", name)
-	fmt.Fprintf(w, "Banner = %s\n", banner)
-}
+// 	fmt.Fprintf(w, "Name = %s\n", name)
+// 	fmt.Fprintf(w, "Banner = %s\n", banner)
+// }
 
 func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if r.Method != "POST" {
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		http.Error(w, "Please use HTTP POST method", http.StatusBadRequest)
 		return
 	}
-	fmt.Println("Post successful")
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Bad Request in Form", http.StatusBadRequest)
+		return
+	}
+
+	ascii := r.FormValue("ascii")
+	banner := r.FormValue("banner")
+
+	fmt.Fprintf(w, "Ascii = %s\n", ascii)
+	fmt.Fprintf(w, "Banner = %s\n", banner)
+	// AsciiArt()
+
 }
 
 // going to integrate with formHandler
@@ -35,7 +46,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// check for verifying the type of the request
 	if r.Method != "GET" {
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		http.Error(w, "Please use HTTP GET method", http.StatusBadRequest)
 		return
 	}
 

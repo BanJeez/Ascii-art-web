@@ -1,4 +1,4 @@
-package asciiart
+package main
 
 import (
 	"bufio"
@@ -77,14 +77,6 @@ func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
 }
 
 func AsciiArt() {
-	// if len(os.Args) != 3 {
-	// 	fmt.Println("Arg amount is not right")
-	// }
-	// var outPut string
-	// flag.StringVar(&outPut, "string", "", "output string")
-	// flag.Parse()
-	// fmt.Println(*outPut)
-	// read input str
 	var inputStrSlices []string
 	inputStr := os.Args[1]
 	banner := os.Args[2]

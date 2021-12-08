@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 )
@@ -46,64 +45,60 @@ func scanChar(r io.Reader, startLine int) ([]string, error) {
 	return bigCharLines, io.EOF
 }
 
-func printBigChar(w http.ResponseWriter, chMap *map[byte][]string, inpBSlice []byte) {
+func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
 	for l := 0; l < 8; l++ {
 		chLine := ""
 		for ch := 0; ch < len(inpBSlice); ch++ {
 			chLine += string((*chMap)[inpBSlice[ch]][l])
 		}
-		// fmt.Print(chLine)
-		// fmt.Println("")
-		fmt.Fprintln(w, chLine)
-		fmt.Fprintln(w, "")
 
+		fmt.Print(chLine)
+		fmt.Println("")
+		// fmt.Fprintln(w, chLine)
+		// fmt.Fprintln(w, "")
+
+		// if numberfornewline > 0 {
+		// 	fmt.Print("\n") // not recognised in html, at least not outside of <pre>
+		// }
+		// res1 := strings.Split(os.Args[3], "=") // need to be modified
+
+		arraychline := []string{chLine}
+		// fmt.Print(arraychline)
+		file, err := os.OpenFile("artwork.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatalf("failed creating file: %s", err)
+		}
+
+		datawriter := bufio.NewWriter(file)
+
+		for _, data := range arraychline {
+			_, _ = datawriter.WriteString(data + "\n")
+		}
+
+		datawriter.Flush()
+		file.Close()
 	}
-
-	if numberfornewline > 0 {
-		fmt.Print("\n") // not recognised in html, at least not outside of <pre>
-	}
-	// res1 := strings.Split(os.Args[3], "=") // need to be modified
-
-	// arraychline := []string{chLine}
-
-	// use later
-	// 	file, err := os.OpenFile(res1[1], os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	// 	if err != nil {
-	// 		log.Fatalf("failed creating file: %s", err)
-	// 	}
-
-	// 	datawriter := bufio.NewWriter(file)
-
-	// 	for _, data := range arraychline {
-	// 		_, _ = datawriter.WriteString(data + "\n")
-	// 	}
-
-	// 	datawriter.Flush()
-	// 	file.Close()
-	// }
-
 }
 
-func AsciiArt(w http.ResponseWriter, inputStr string, banner string) {
+func AsciiArt(inputStr string, banner string) {
 	var inputStrSlices []string
-
-	// fmt.Println("input: ", inputStr)
 	inputrune := []rune(inputStr)
 	s1 := inputStr
-	if len(inputStr) >= 2 {
-		if inputrune[len(inputStr)-2] == '\\' && inputrune[len(inputStr)-1] == 'n' {
-			if last := len(s1) - 1; last >= 0 && s1[last] == 'n' {
-				s1 = s1[:last]
-			}
-			s2 := s1
-			if last := len(s2) - 1; last >= 0 && s2[last] == '\\' {
-				s2 = s2[:last]
-			}
-			inputStrSlices = strings.Split(s2, "%&*(&()YKUYfa3432) 45sdt4") // just something unique
-			numberfornewline++
+	if len(inputStr) < 2 {
+		inputStrSlices = strings.Fields(s1)
+	} else if inputrune[len(inputStr)-2] == '\\' && inputrune[len(inputStr)-1] == 'n' {
+		if last := len(s1) - 1; last >= 0 && s1[last] == 'n' {
+			s1 = s1[:last] // remove the last n
 		}
+		s2 := s1
+		if last := len(s2) - 1; last >= 0 && s2[last] == '\\' {
+			s2 = s2[:last] // remove the 2nd last \
+		}
+		// convert s2 (string) to slice of string (with only itself in the slice)
+		inputStrSlices = strings.Split(s2, " ")
+		numberfornewline++ // increment the counter
 	} else {
-		inputStrSlices = strings.Split(inputStr, "\\n")
+		inputStrSlices = strings.Split(inputStr, "\\n") // normal case
 	}
 	for _, inputSlice := range inputStrSlices {
 		// process the str
@@ -133,6 +128,6 @@ func AsciiArt(w http.ResponseWriter, inputStr string, banner string) {
 
 			charMap[inputBSlice[inp]] = bigChar
 		}
-		printBigChar(w, &charMap, inputBSlice)
+		printBigChar(&charMap, inputBSlice)
 	}
 }

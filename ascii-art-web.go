@@ -21,6 +21,21 @@ import (
 // 	fmt.Fprintf(w, "Banner = %s\n", banner)
 // }
 
+func processTemplate(tplPath string, w http.ResponseWriter) {
+	tpl, err := template.ParseFiles(tplPath)
+	if err != nil {
+		log.Printf("Parse Error: %v", err)
+		http.Error(w, "Error when Parsing", http.StatusInternalServerError)
+		return
+	}
+	tpl.Execute(w, nil)
+	if err != nil {
+		log.Printf("Execute Error: %v", err)
+		http.Error(w, "Error when Executing", http.StatusInternalServerError)
+		return
+	}
+}
+
 func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if r.Method != "POST" {
@@ -37,7 +52,11 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Ascii = %s", ascii)
 	fmt.Fprintf(w, "Banner = %s", banner)
-	AsciiArt(w, ascii, banner)
+	AsciiArt(ascii, banner)
+	// art := AsciiArt(ascii, banner)
+
+	tplPath := filepath.Join("static", "index.html")
+	processTemplate(tplPath, w)
 
 }
 
@@ -51,18 +70,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tplPath := filepath.Join("static", "index.html")
-	tpl, err := template.ParseFiles(tplPath)
-	if err != nil {
-		log.Printf("Parse Error: %v", err)
-		http.Error(w, "Error when Parsing", http.StatusInternalServerError)
-		return
-	}
-	tpl.Execute(w, nil)
-	if err != nil {
-		log.Printf("Execute Error: %v", err)
-		http.Error(w, "Error when Executing", http.StatusInternalServerError)
-		return
-	}
+	processTemplate(tplPath, w)
 }
 
 func pathHandler(w http.ResponseWriter, r *http.Request) {

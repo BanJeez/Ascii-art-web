@@ -52,32 +52,36 @@ func printBigChar(w http.ResponseWriter, chMap *map[byte][]string, inpBSlice []b
 		for ch := 0; ch < len(inpBSlice); ch++ {
 			chLine += string((*chMap)[inpBSlice[ch]][l])
 		}
-		fmt.Fprint(w, chLine)
-		fmt.Fprint(w, "")
+		// fmt.Print(chLine)
+		// fmt.Println("")
+		fmt.Fprintln(w, chLine)
+		fmt.Fprintln(w, "")
 
-		if numberfornewline > 0 {
-			fmt.Print("\n") // not recognised in html, at least not outside of <pre>
-		}
-		// res1 := strings.Split(os.Args[3], "=") // need to be modified
-
-		// arraychline := []string{chLine}
-
-		// use later
-		// 	file, err := os.OpenFile(res1[1], os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		// 	if err != nil {
-		// 		log.Fatalf("failed creating file: %s", err)
-		// 	}
-
-		// 	datawriter := bufio.NewWriter(file)
-
-		// 	for _, data := range arraychline {
-		// 		_, _ = datawriter.WriteString(data + "\n")
-		// 	}
-
-		// 	datawriter.Flush()
-		// 	file.Close()
-		// }
 	}
+
+	if numberfornewline > 0 {
+		fmt.Print("\n") // not recognised in html, at least not outside of <pre>
+	}
+	// res1 := strings.Split(os.Args[3], "=") // need to be modified
+
+	// arraychline := []string{chLine}
+
+	// use later
+	// 	file, err := os.OpenFile(res1[1], os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// 	if err != nil {
+	// 		log.Fatalf("failed creating file: %s", err)
+	// 	}
+
+	// 	datawriter := bufio.NewWriter(file)
+
+	// 	for _, data := range arraychline {
+	// 		_, _ = datawriter.WriteString(data + "\n")
+	// 	}
+
+	// 	datawriter.Flush()
+	// 	file.Close()
+	// }
+
 }
 
 func AsciiArt(w http.ResponseWriter, inputStr string, banner string) {
@@ -86,16 +90,18 @@ func AsciiArt(w http.ResponseWriter, inputStr string, banner string) {
 	// fmt.Println("input: ", inputStr)
 	inputrune := []rune(inputStr)
 	s1 := inputStr
-	if inputrune[len(inputStr)-2] == '\\' && inputrune[len(inputStr)-1] == 'n' {
-		if last := len(s1) - 1; last >= 0 && s1[last] == 'n' {
-			s1 = s1[:last]
+	if len(inputStr) >= 2 {
+		if inputrune[len(inputStr)-2] == '\\' && inputrune[len(inputStr)-1] == 'n' {
+			if last := len(s1) - 1; last >= 0 && s1[last] == 'n' {
+				s1 = s1[:last]
+			}
+			s2 := s1
+			if last := len(s2) - 1; last >= 0 && s2[last] == '\\' {
+				s2 = s2[:last]
+			}
+			inputStrSlices = strings.Split(s2, "%&*(&()YKUYfa3432) 45sdt4") // just something unique
+			numberfornewline++
 		}
-		s2 := s1
-		if last := len(s2) - 1; last >= 0 && s2[last] == '\\' {
-			s2 = s2[:last]
-		}
-		inputStrSlices = strings.Split(s2, "%&*(&()YKUYfa3432) 45sdt4") // just something unique
-		numberfornewline++
 	} else {
 		inputStrSlices = strings.Split(inputStr, "\\n")
 	}

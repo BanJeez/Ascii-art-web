@@ -52,8 +52,8 @@ func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
 			chLine += string((*chMap)[inpBSlice[ch]][l])
 		}
 
-		fmt.Print(chLine)
-		fmt.Println("")
+		// fmt.Print(chLine)
+		// fmt.Println("")
 		// fmt.Fprintln(w, chLine)
 		// fmt.Fprintln(w, "")
 

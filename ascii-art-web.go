@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -59,41 +61,37 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// ascii := r.FormValue("ascii")
 	ascii := r.PostForm.Get("ascii")
-	// fmt.Print(ascii)
-	asciiSlice := strings.Split(ascii, "")
-	// // banner := r.FormValue("banner")
+	asciiSlice := strings.Split(ascii, "\r\n")
+	banner := r.FormValue("banner")
 
-	fmt.Print(asciiSlice[0])
-	// fmt.Printf("%s", asciiSlice[0])
-	// fmt.Print("jfslsdg")
-	// fmt.Printf("%s", asciiSlice[1])
+	fmt.Print(asciiSlice)
+	fmt.Printf("%s", asciiSlice[0])
+	fmt.Printf("%s", asciiSlice[1])
 
 	// fmt.Fprintf(w, "Ascii = %s", ascii)
 	// fmt.Fprintln(w, "")
 	// fmt.Fprintf(w, "Banner = %s", banner)
-	// AsciiArt(asciiSlice[0], banner)
-	// for i := 0; i < len(asciiSlice); i++ {
-	// 	AsciiArt(asciiSlice[i], banner)
-	// }
+	for i := 0; i < len(asciiSlice); i++ {
+		AsciiArt(asciiSlice[i], banner)
+	}
 
-	// fArt, err := os.OpenFile("artwork.txt", os.O_RDONLY, 0400)
-	// if err != nil {
-	// 	http.Error(w, "Error when Outputting", http.StatusInternalServerError)
-	// 	return
-	// }
-	// defer fArt.Close()
+	fArt, err := os.OpenFile("artwork.txt", os.O_RDONLY, 0400)
+	if err != nil {
+		http.Error(w, "Error when Outputting", http.StatusInternalServerError)
+		return
+	}
+	defer fArt.Close()
 
-	// lineScanner := bufio.NewScanner(fArt)
-	// lineScanner.Split(bufio.ScanLines)
+	lineScanner := bufio.NewScanner(fArt)
+	lineScanner.Split(bufio.ScanLines)
 
-	// allArt := []string{}
-	// allArt = append(allArt, "")
+	allArt := []string{}
+	allArt = append(allArt, "")
 
-	// for lineScanner.Scan() {
-	// 	allArt = append(allArt, lineScanner.Text())
-	// }
+	for lineScanner.Scan() {
+		allArt = append(allArt, lineScanner.Text())
+	}
 
 	// fmt.Println(allArt)
 
@@ -106,16 +104,16 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 	// // fmt.Println(art[7])
 	// // fmt.Println(art[8])
 
-	// // artwork := Asciiart{
-	// // 	ArtLine1: art[1],
-	// // 	ArtLine2: art[2],
-	// // 	ArtLine3: art[3],
-	// // 	ArtLine4: art[4],
-	// // 	ArtLine5: art[5],
-	// // 	ArtLine6: art[6],
-	// // 	ArtLine7: art[7],
-	// // 	ArtLine8: art[8],
-	// // }
+	artwork := Asciiart{
+		ArtLine1: allArt[1],
+		ArtLine2: allArt[2],
+		ArtLine3: allArt[3],
+		ArtLine4: allArt[4],
+		ArtLine5: allArt[5],
+		ArtLine6: allArt[6],
+		ArtLine7: allArt[7],
+		ArtLine8: allArt[8],
+	}
 	// // var input []string
 	// // tempmap := make(map[int][]string)
 	// // letters := strings.Split(ascii, "")
@@ -136,19 +134,19 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 	// // 	// fmt.Fprintln(w, "")
 	// // }
 
-	// tplPath := filepath.Join("static", "ascii-art.gohtml")
-	// tpl, err := template.ParseFiles(tplPath)
-	// if err != nil {
-	// 	log.Printf("Parse Error: %v", err)
-	// 	http.Error(w, "Error when Parsing", http.StatusInternalServerError)
-	// 	return
-	// }
-	// tpl.Execute(w, nil)
-	// if err != nil {
-	// 	log.Printf("Execute Error: %v", err)
-	// 	http.Error(w, "Error when Executing", http.StatusInternalServerError)
-	// 	return
-	// }
+	tplPath := filepath.Join("static", "ascii-art.gohtml")
+	tpl, err := template.ParseFiles(tplPath)
+	if err != nil {
+		log.Printf("Parse Error: %v", err)
+		http.Error(w, "Error when Parsing", http.StatusInternalServerError)
+		return
+	}
+	tpl.Execute(w, artwork)
+	if err != nil {
+		log.Printf("Execute Error: %v", err)
+		http.Error(w, "Error when Executing", http.StatusInternalServerError)
+		return
+	}
 
 }
 

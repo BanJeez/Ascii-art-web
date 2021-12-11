@@ -11,29 +11,9 @@ import (
 	"text/template"
 )
 
-type Asciiart struct {
-	ArtLine1 string
-	ArtLine2 string
-	ArtLine3 string
-	ArtLine4 string
-	ArtLine5 string
-	ArtLine6 string
-	ArtLine7 string
-	ArtLine8 string
+type ArtPiece struct {
+	ArtLines []string
 }
-
-// func formHandler(w http.ResponseWriter, r *http.Request) {
-// 	if err := r.ParseForm(); err != nil {
-// 		fmt.Fprintf(w, "ParseForm() err: %v", err)
-// 		return
-// 	}
-// 	fmt.Fprintf(w, "POST request successful")
-// 	name := r.FormValue("name")
-// 	banner := r.FormValue("banner")
-
-// 	fmt.Fprintf(w, "Name = %s\n", name)
-// 	fmt.Fprintf(w, "Banner = %s\n", banner)
-// }
 
 func processTemplate(tplPath string, w http.ResponseWriter) {
 	tpl, err := template.ParseFiles(tplPath)
@@ -93,46 +73,9 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 		allArt = append(allArt, lineScanner.Text())
 	}
 
-	// fmt.Println(allArt)
-
-	// // fmt.Println(art[1])
-	// // fmt.Println(art[2])
-	// // fmt.Println(art[3])
-	// // fmt.Println(art[4])
-	// // fmt.Println(art[5])
-	// // fmt.Println(art[6])
-	// // fmt.Println(art[7])
-	// // fmt.Println(art[8])
-
-	artwork := Asciiart{
-		ArtLine1: allArt[1],
-		ArtLine2: allArt[2],
-		ArtLine3: allArt[3],
-		ArtLine4: allArt[4],
-		ArtLine5: allArt[5],
-		ArtLine6: allArt[6],
-		ArtLine7: allArt[7],
-		ArtLine8: allArt[8],
+	artwork := ArtPiece{
+		ArtLines: allArt,
 	}
-	// // var input []string
-	// // tempmap := make(map[int][]string)
-	// // letters := strings.Split(ascii, "")
-
-	// // for i := 0; i < len(ascii); i++ {
-	// // 	input = (AsciiArt(letters[i], banner))
-	// // 	for j, line := range input {
-	// // 		tempmap[j] = append(tempmap[j], line)
-	// // 	}
-	// // }
-
-	// // for k := 0; k < 8; k++ {
-	// // 	for m := 0; m < len(ascii); m++ {
-	// // 		fmt.Print(tempmap[k][m])
-	// // 		// fmt.Fprintf(w, tempmap[k][m])
-	// // 	}
-	// // 	fmt.Println("")
-	// // 	// fmt.Fprintln(w, "")
-	// // }
 
 	tplPath := filepath.Join("static", "ascii-art.gohtml")
 	tpl, err := template.ParseFiles(tplPath)

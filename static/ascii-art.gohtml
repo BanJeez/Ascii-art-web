@@ -9,14 +9,8 @@
 <body>
     <h1>ASCII Art Generator</h1>
     <pre>
-        {{.ArtLine1}}
-        {{.ArtLine2}}
-        {{.ArtLine3}}
-        {{.ArtLine4}}
-        {{.ArtLine5}}
-        {{.ArtLine6}}
-        {{.ArtLine7}}
-        {{.ArtLine8}}
+        {{range .ArtLines}}{{.}}<br>{{end}}
     </pre>
 </body>
 </html>
+

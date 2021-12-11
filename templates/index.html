@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASCII ART-WEB</title>
-</head>
-<body>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible"
+      content="IE=edge">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+    <title>ASCII ART-WEB</title>
+  </head>
+
+  <body>
     <h1>ASCII ART Maker</h1>
-<p>The select element defines a drop-down list:</p>
-<div>
-  <form method="POST" action="/ascii-art">     
-      <label for="ascii">Text Input: </label>
-      <textarea name="ascii" cols="30" rows="10" placeholder="Type here..."></textarea>
-      <label for="banner">Choose a Banner:</label>
-      <select id="banner" name="banner">
-        <option selected value="standard">Standard</option>
-        <option value="shadow">Shadow</option>
-        <option value="thinkertoy">ThinkerToy</option>
-      </select> 
-      <input type="submit" value="submit" />
-  </form>
-</div>
-</body>
+    <p>The select element defines a drop-down list:</p>
+    <div>
+      <form method="POST"
+        action="/ascii-art">
+        <label for="ascii">Text Input: </label>
+        <textarea name="ascii"
+          cols="30"
+          rows="6"
+          placeholder="Type here..."></textarea>
+        <label for="banner">Choose a Banner:</label>
+        <select id="banner"
+          name="banner">
+          <option selected
+            value="standard">Standard</option>
+          <option value="shadow">Shadow</option>
+          <option value="thinkertoy">ThinkerToy</option>
+        </select>
+        <input type="submit"
+          value="submit" />
+      </form>
+    </div>
+  </body>
+
 </html>

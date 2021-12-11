@@ -3,12 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 )
 
 type ArtPiece struct {
@@ -45,13 +45,6 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 	asciiSlice := strings.Split(ascii, "\r\n")
 	banner := r.FormValue("banner")
 
-	fmt.Print(asciiSlice)
-	fmt.Printf("%s", asciiSlice[0])
-	fmt.Printf("%s", asciiSlice[1])
-
-	// fmt.Fprintf(w, "Ascii = %s", ascii)
-	// fmt.Fprintln(w, "")
-	// fmt.Fprintf(w, "Banner = %s", banner)
 	for i := 0; i < len(asciiSlice); i++ {
 		AsciiArt(asciiSlice[i], banner)
 	}
@@ -77,7 +70,7 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 		ArtLines: allArt,
 	}
 
-	tplPath := filepath.Join("static", "ascii-art.gohtml")
+	tplPath := filepath.Join("templates", "ascii-art.gohtml")
 	tpl, err := template.ParseFiles(tplPath)
 	if err != nil {
 		log.Printf("Parse Error: %v", err)
@@ -90,19 +83,17 @@ func assciArtHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error when Executing", http.StatusInternalServerError)
 		return
 	}
-
 }
 
-// going to integrate with formHandler
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	// check for verifying the type of the request
+
 	if r.Method != "GET" {
 		http.Error(w, "Please use HTTP GET method", http.StatusBadRequest)
 		return
 	}
 
-	tplPath := filepath.Join("static", "index.html")
+	tplPath := filepath.Join("templates", "index.html")
 	tpl, err := template.ParseFiles(tplPath)
 	if err != nil {
 		log.Printf("Parse Error: %v", err)
@@ -129,9 +120,6 @@ func pathHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// fileServer1 := http.FileServer(http.Dir("./static"))
-	// http.Handle("/", fileServer1)
-
 	http.HandleFunc("/*", pathHandler)
 
 	fmt.Printf("Starting server at port 8080\n")

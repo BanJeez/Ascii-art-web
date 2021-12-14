@@ -61,9 +61,10 @@ func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
 		// 	fmt.Print("\n") // not recognised in html, at least not outside of <pre>
 		// }
 		// res1 := strings.Split(os.Args[3], "=") // need to be modified
-
+		
 		arraychline := []string{chLine}
 		// fmt.Print(arraychline)
+
 		file, err := os.OpenFile("artwork.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatalf("failed creating file: %s", err)
@@ -77,6 +78,7 @@ func printBigChar(chMap *map[byte][]string, inpBSlice []byte) {
 
 		datawriter.Flush()
 		file.Close()
+
 	}
 }
 

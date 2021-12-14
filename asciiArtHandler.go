@@ -24,6 +24,9 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request in Form", http.StatusBadRequest)
 		return
 	}
+	if _, err := os.Stat("artwork.txt"); err == nil {
+		os.Remove("artwork.txt")
+	}
 
 	ascii := r.PostForm.Get("ascii")
 	asciiSlice := strings.Split(ascii, "\r\n")

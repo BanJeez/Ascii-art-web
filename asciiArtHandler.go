@@ -10,10 +10,6 @@ import (
 	"strings"
 )
 
-type ArtPiece struct {
-	ArtLines []string
-}
-
 func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if r.Method != "POST" {
@@ -53,10 +49,6 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		allArt = append(allArt, lineScanner.Text())
 	}
 
-	artwork := ArtPiece{
-		ArtLines: allArt,
-	}
-
 	tplPath := filepath.Join("templates", "ascii-art.html")
 	tpl, err := template.ParseFiles(tplPath)
 	if err != nil {
@@ -64,7 +56,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error when Parsing", http.StatusInternalServerError)
 		return
 	}
-	tpl.Execute(w, artwork)
+	tpl.Execute(w, allArt)
 	if err != nil {
 		log.Printf("Execute Error: %v", err)
 		http.Error(w, "Error when Executing", http.StatusInternalServerError)

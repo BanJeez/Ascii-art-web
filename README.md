@@ -6,13 +6,13 @@ ASCII-art-web is a project that creates and maintains a server, in which it's po
 
 1. From your teminal going to the ascii-art-web dir.
 
-2. then type `go run .` this will start the svera on port 8080
+2. then type `go run .` this will start the server on port 8080
 
-3. in a web browser go to localhost 8080
+3. in a web browser go to localhost:8080
 
 ## Main Code Overview 
 
-By useing the Package http provides us with a HTTP client and server implementations.
+By using the Package http provides us with a HTTP client and server implementations.
 
 We uses the Get, Head, Post, and PostForm to make HTTP requests:
 
@@ -31,5 +31,5 @@ We uses the Get, Head, Post, and PostForm to make HTTP requests:
 
 ## Authors 
 
-David, Brksygmr, Banji
+David, Burak, Banji
 

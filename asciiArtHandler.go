@@ -57,7 +57,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		ArtLines: allArt,
 	}
 
-	tplPath := filepath.Join("templates", "ascii-art.gohtml")
+	tplPath := filepath.Join("templates", "ascii-art.html")
 	tpl, err := template.ParseFiles(tplPath)
 	if err != nil {
 		log.Printf("Parse Error: %v", err)

@@ -29,6 +29,12 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	banner := r.FormValue("banner")
 
 	for i := 0; i < len(asciiSlice); i++ {
+		for _, letter := range asciiSlice[i] {
+			if letter < 32 || letter > 126 {
+				http.Error(w, "String contains non-Ascii characters", http.StatusBadRequest)
+				return
+			}
+		}
 		AsciiArt(asciiSlice[i], banner)
 	}
 
